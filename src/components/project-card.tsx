@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import {
   Play,
   Square,
@@ -10,7 +11,6 @@ import {
   Check,
   Download,
   Search,
-  Globe,
   ExternalLink,
 } from "lucide-react";
 import {
@@ -19,7 +19,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { VSCodeIcon } from "@/components/icons";
+
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -29,7 +29,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+
 import {
   Sheet,
   SheetContent,
@@ -77,7 +77,7 @@ export function ProjectCard({ project, onRefresh }: ProjectCardProps) {
         `/api/process?path=${encodeURIComponent(project.path)}`,
         {
           method: "DELETE",
-        },
+        }
       );
       if (!res.ok) throw new Error("Failed to stop");
       toast.success(`Stopped ${project.name}`);
@@ -113,6 +113,14 @@ export function ProjectCard({ project, onRefresh }: ProjectCardProps) {
     <Card className="w-full">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <div className="flex items-center gap-2 overflow-hidden mr-2">
+          <div
+            className={`w-2.5 h-2.5 rounded-full ${
+              project.status === "running"
+                ? "bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)]"
+                : "bg-muted-foreground/30"
+            }`}
+            title={project.status === "running" ? "Running" : "Stopped"}
+          />
           <CardTitle
             className="text-sm font-medium truncate"
             title={project.name}
@@ -128,7 +136,13 @@ export function ProjectCard({ project, onRefresh }: ProjectCardProps) {
             onClick={handleOpenCode}
             title="Open in Code Editor"
           >
-            <VSCodeIcon className="h-5 w-5" />
+            <Image
+              src="/code.svg"
+              alt="Code"
+              width={20}
+              height={20}
+              className="w-5 h-5"
+            />
           </Button>
 
           {project.environments &&
@@ -141,13 +155,25 @@ export function ProjectCard({ project, onRefresh }: ProjectCardProps) {
                 onClick={() => handleOpenUrl(project.environments![0].url)}
                 title={`Open ${project.environments![0].name}`}
               >
-                <Globe className="h-5 w-5" />
+                <Image
+                  src="/chrome.svg"
+                  alt="Browser"
+                  width={20}
+                  height={20}
+                  className="w-5 h-5"
+                />
               </Button>
             ) : (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" size="icon" className="h-8 w-8">
-                    <Globe className="h-5 w-5" />
+                    <Image
+                      src="/chrome.svg"
+                      alt="Browser"
+                      width={20}
+                      height={20}
+                      className="w-5 h-5"
+                    />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
@@ -163,12 +189,6 @@ export function ProjectCard({ project, onRefresh }: ProjectCardProps) {
                 </DropdownMenuContent>
               </DropdownMenu>
             ))}
-
-          <Badge
-            variant={project.status === "running" ? "default" : "secondary"}
-          >
-            {project.status}
-          </Badge>
         </div>
       </CardHeader>
       <CardContent>
@@ -269,7 +289,7 @@ function BranchList({
   const [searchQuery, setSearchQuery] = useState("");
 
   const filteredBranches = branches.filter((branch) =>
-    branch.toLowerCase().includes(searchQuery.toLowerCase()),
+    branch.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   useEffect(() => {
@@ -277,7 +297,7 @@ function BranchList({
       setLoading(true);
       try {
         const res = await fetch(
-          `/api/git/branches?path=${encodeURIComponent(project.path)}`,
+          `/api/git/branches?path=${encodeURIComponent(project.path)}`
         );
         if (res.ok) {
           const data = await res.json();

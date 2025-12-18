@@ -16,7 +16,7 @@ export default function DashboardPage() {
   const filteredProjects = projects.filter(
     (project) =>
       project.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      project.path.toLowerCase().includes(searchQuery.toLowerCase()),
+      project.path.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const fetchProjects = async () => {
@@ -39,9 +39,9 @@ export default function DashboardPage() {
   }, []);
 
   return (
-    <div className="w-full mx-auto px-6">
+    <div className="w-full mx-auto px-6 py-6">
       <div className="flex items-center justify-between mb-8">
-        <div className="flex items-center gap-2 justify-between w-full pt-6">
+        <div className="flex items-center gap-2 justify-between w-full">
           <div className="relative w-full">
             <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
