@@ -6,13 +6,7 @@ import { RefreshCw, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-interface Project {
-  name: string;
-  path: string;
-  status: "running" | "stopped" | "error";
-  command?: string;
-  currentBranch?: string;
-}
+import type { Project } from "@/types/project";
 
 export default function DashboardPage() {
   const [projects, setProjects] = useState<Project[]>([]);

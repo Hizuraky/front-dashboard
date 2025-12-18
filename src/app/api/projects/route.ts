@@ -12,7 +12,13 @@ export async function GET() {
     await processManager.scanRunningProcesses();
 
     const projects = [];
-    const projectPaths: { path: string; command: string; name?: string }[] = [];
+    const projectPaths: {
+      path: string;
+      command: string;
+      name?: string;
+      codeCommand?: string;
+      environments?: { name: string; url: string }[];
+    }[] = [];
 
     try {
       const configContent = await readFile(PROJECTS_CONFIG_PATH, "utf-8");
@@ -27,6 +33,8 @@ export async function GET() {
               path: item.path,
               command: item.command || "yarn dev",
               name: item.name,
+              codeCommand: item.codeCommand,
+              environments: item.environments,
             });
           }
         }
@@ -57,6 +65,8 @@ export async function GET() {
             status,
             command: config.command,
             currentBranch: await getCurrentBranch(config.path),
+            codeCommand: config.codeCommand,
+            environments: config.environments,
           });
         }
       } catch {}
@@ -67,7 +77,7 @@ export async function GET() {
     console.error("Failed to scan projects:", error);
     return NextResponse.json(
       { error: "Failed to scan projects" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

@@ -10,7 +10,16 @@ import {
   Check,
   Download,
   Search,
+  Globe,
+  ExternalLink,
 } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { VSCodeIcon } from "@/components/icons";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -33,15 +42,7 @@ import { LogViewer } from "./log-viewer";
 import { toast } from "sonner";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
-type ProjectStatus = "running" | "stopped" | "error";
-
-interface Project {
-  name: string;
-  path: string;
-  status: ProjectStatus;
-  command?: string;
-  currentBranch?: string;
-}
+import type { Project } from "@/types/project";
 
 interface ProjectCardProps {
   project: Project;
@@ -88,13 +89,87 @@ export function ProjectCard({ project, onRefresh }: ProjectCardProps) {
     }
   };
 
+  const handleOpenCode = async () => {
+    try {
+      const res = await fetch("/api/open-editor", {
+        method: "POST",
+        body: JSON.stringify({
+          path: project.path,
+          command: project.codeCommand || "code .",
+        }),
+      });
+      if (!res.ok) throw new Error("Failed to open code editor");
+      toast.success("Opened in editor");
+    } catch {
+      toast.error("Failed to open editor");
+    }
+  };
+
+  const handleOpenUrl = (url: string) => {
+    window.open(url, "_blank", "noopener,noreferrer");
+  };
+
   return (
     <Card className="w-full">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm font-medium">{project.name}</CardTitle>
-        <Badge variant={project.status === "running" ? "default" : "secondary"}>
-          {project.status}
-        </Badge>
+        <div className="flex items-center gap-2 overflow-hidden mr-2">
+          <CardTitle
+            className="text-sm font-medium truncate"
+            title={project.name}
+          >
+            {project.name}
+          </CardTitle>
+        </div>
+        <div className="flex items-center gap-1 shrink-0">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-8 w-8"
+            onClick={handleOpenCode}
+            title="Open in Code Editor"
+          >
+            <VSCodeIcon className="h-5 w-5" />
+          </Button>
+
+          {project.environments &&
+            project.environments.length > 0 &&
+            (project.environments.length === 1 ? (
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8"
+                onClick={() => handleOpenUrl(project.environments![0].url)}
+                title={`Open ${project.environments![0].name}`}
+              >
+                <Globe className="h-5 w-5" />
+              </Button>
+            ) : (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="icon" className="h-8 w-8">
+                    <Globe className="h-5 w-5" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  {project.environments.map((env) => (
+                    <DropdownMenuItem
+                      key={env.name}
+                      onClick={() => handleOpenUrl(env.url)}
+                    >
+                      {env.name}
+                      <ExternalLink className="ml-2 h-3 w-3 opacity-50" />
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ))}
+
+          <Badge
+            variant={project.status === "running" ? "default" : "secondary"}
+          >
+            {project.status}
+          </Badge>
+        </div>
       </CardHeader>
       <CardContent>
         <div
