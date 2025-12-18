@@ -1,0 +1,12 @@
+[
+  {
+    "name": "example-project",
+    "path": "/Users/username/WorkSpace/example-project",
+    "startCommand": "yarn dev",
+  },
+  {
+    "name": "another-project",
+    "path": "/Users/username/WorkSpace/another-site",
+    "startCommand": "npm run dev",
+  }
+]

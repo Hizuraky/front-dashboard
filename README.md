@@ -1,36 +1,74 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 開発プロジェクト管理アプリ
 
-## Getting Started
+複数の Node プロジェクト管理する web アプリ
 
-First, run the development server:
+## 機能概要
+
+- **プロジェクト管理**: ローカルにある複数のプロジェクトを一覧表示。
+- **ワンクリック起動**: `yarn dev` や `npm run dev` などのコマンドをボタン一つで実行。
+- **ログビューア**: 各プロジェクトの実行ログをリアルタイムで確認可能。
+- **Git 連携**: 現在のチェックアウトされているブランチ名を表示。
+- **設定**: `projects.json` による管理プロジェクトの設定。
+
+## 技術スタック
+
+- **Framework**: Next.js 16 (App Router)
+- **Language**: TypeScript
+- **UI Framework**: React 19
+- **Styling**: Tailwind CSS 4
+- **Components**: Radix UI / shadcn/ui
+- **Icons**: Lucide React
+- **State Management**: Jotai
+- **Validation**: Zod, React Hook Form
+
+## セットアップと使い方
+
+### 1. リポジトリのクローンと依存関係のインストール
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+yarn install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. 設定ファイルの作成
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+`projects.json.example` をコピーして `projects.json` を作成
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+cp projects.json.example projects.json
+```
 
-## Learn More
+### 3. プロジェクトの登録
 
-To learn more about Next.js, take a look at the following resources:
+`projects.json` を編集し、管理したいプロジェクトの情報を追加します。
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+**設定項目:**
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- `name`: （内部識別用 ID として使用されます。一意な名前を推奨）
+- `path`: プロジェクトのルートディレクトリへの絶対パス
+- `startCommand`: 起動コマンド（例: `yarn dev`, `npm run dev`）。省略時は `yarn dev` が使用されます。
+- `displayName`: ダッシュボード上に表示する名前。省略時はディレクトリ名などが使用されます。
 
-## Deploy on Vercel
+**例:**
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```json
+[
+  {
+    "name": "my-project",
+    "path": "/Users/username/WorkSpace/my-project",
+    "startCommand": "yarn dev",
+    "displayName": "My Main Project"
+  }
+]
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### 4. アプリケーションの起動
+
+```bash
+yarn dev
+```
+
+ブラウザで `http://localhost:3000` にアクセスするとダッシュボードが表示されます。
+
+---
+
+Created by Gemini 3 Pro.
