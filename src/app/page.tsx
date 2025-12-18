@@ -10,6 +10,7 @@ interface Project {
   path: string;
   status: "running" | "stopped" | "error";
   command?: string;
+  currentBranch?: string;
 }
 
 export default function DashboardPage() {

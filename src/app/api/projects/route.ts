@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { readdir, stat, readFile } from "fs/promises";
 import { join, basename } from "path";
 import { processManager } from "@/lib/process-manager";
+import { getCurrentBranch } from "@/lib/git";
 
 const WORKSPACE_ROOT = "/Users/kazuki/WorkSpace/0plus";
 const PROJECTS_CONFIG_PATH = join(process.cwd(), "projects.json");
@@ -58,6 +59,7 @@ export async function GET() {
             path: config.path,
             status,
             command: config.command, // Pass the command to the frontend
+            currentBranch: await getCurrentBranch(config.path),
           });
         }
       } catch {
