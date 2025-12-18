@@ -9,6 +9,8 @@ const PROJECTS_CONFIG_PATH = join(process.cwd(), "projects.json");
 
 export async function GET() {
   try {
+    await processManager.scanRunningProcesses();
+
     const projects = [];
     const projectPaths: { path: string; command: string; name?: string }[] = [];
 
@@ -65,7 +67,7 @@ export async function GET() {
     console.error("Failed to scan projects:", error);
     return NextResponse.json(
       { error: "Failed to scan projects" },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }
