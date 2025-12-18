@@ -97,10 +97,23 @@ class ProcessManager {
 
   stop(id: string) {
     const entry = this.processes.get(id);
-    if (!entry) return;
-
-    if (entry.process) {
+    if (entry && entry.process) {
       entry.process.kill();
+      return;
+    }
+
+    // Handle external process
+    const pid = this.externalProcesses.get(id);
+    if (pid) {
+      try {
+        process.kill(pid);
+        this.externalProcesses.delete(id);
+        // Force a scan to update status of other potentially related processes
+        // But since this is sync/fire-and-forget from the API perspective,
+        // the next status polling/refresh should catch the update after a re-scan.
+      } catch (e) {
+        console.error(`Failed to kill external process ${pid}:`, e);
+      }
     }
   }
 
