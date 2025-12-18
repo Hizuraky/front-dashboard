@@ -150,9 +150,8 @@ export function ProjectCard({ project, onRefresh }: ProjectCardProps) {
           <SheetContent className="w-[90vw] max-w-[90vw] min-w-[90vw] flex flex-col h-full">
             <SheetHeader>
               <SheetTitle>{project.name} Logs</SheetTitle>
-              <SheetDescription>Live output from the process.</SheetDescription>
             </SheetHeader>
-            <div className="mt-4 overflow-hidden relative">
+            <div className="mt-0 overflow-hidden relative">
               <LogViewer path={project.path} />
             </div>
           </SheetContent>
@@ -276,10 +275,10 @@ function BranchList({
   }
 
   return (
-    <div className="mt-4">
+    <div className="mt-4 flex flex-col h-[calc(100vh-120px)]">
       <Button
         variant="outline"
-        className="w-full mb-4"
+        className="w-full mb-4 shrink-0"
         onClick={handlePull}
         disabled={pullLoading}
       >
@@ -291,7 +290,7 @@ function BranchList({
         Pull Latest
       </Button>
 
-      <div className="relative mb-4">
+      <div className="relative mb-4 shrink-0">
         <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
         <Input
           placeholder="Search branches..."
@@ -301,7 +300,7 @@ function BranchList({
         />
       </div>
 
-      <ScrollArea className="h-[calc(100vh-180px)]">
+      <ScrollArea className="h-full pr-4 pb-8">
         <div className="flex flex-col gap-2 pr-4">
           {filteredBranches.map((branch) => (
             <Button
