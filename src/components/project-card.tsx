@@ -4,9 +4,7 @@ import { useState, useEffect } from "react";
 import {
   Play,
   Square,
-  FileText,
   Loader2,
-  RefreshCw,
   Terminal,
   GitBranch,
   Check,
@@ -64,7 +62,7 @@ export function ProjectCard({ project, onRefresh }: ProjectCardProps) {
       if (!res.ok) throw new Error("Failed to start");
       toast.success(`Started ${project.name}`);
       onRefresh();
-    } catch (e) {
+    } catch {
       toast.error("Failed to start project");
     } finally {
       setLoading(false);
@@ -78,12 +76,12 @@ export function ProjectCard({ project, onRefresh }: ProjectCardProps) {
         `/api/process?path=${encodeURIComponent(project.path)}`,
         {
           method: "DELETE",
-        }
+        },
       );
       if (!res.ok) throw new Error("Failed to stop");
       toast.success(`Stopped ${project.name}`);
       onRefresh();
-    } catch (e) {
+    } catch {
       toast.error("Failed to stop project");
     } finally {
       setLoading(false);
@@ -196,29 +194,29 @@ function BranchList({
   const [searchQuery, setSearchQuery] = useState("");
 
   const filteredBranches = branches.filter((branch) =>
-    branch.toLowerCase().includes(searchQuery.toLowerCase())
+    branch.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   useEffect(() => {
+    const fetchBranches = async () => {
+      setLoading(true);
+      try {
+        const res = await fetch(
+          `/api/git/branches?path=${encodeURIComponent(project.path)}`,
+        );
+        if (res.ok) {
+          const data = await res.json();
+          setBranches(data.branches);
+        }
+      } catch {
+        toast.error("Failed to load branches");
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchBranches();
   }, [project.path]);
-
-  const fetchBranches = async () => {
-    setLoading(true);
-    try {
-      const res = await fetch(
-        `/api/git/branches?path=${encodeURIComponent(project.path)}`
-      );
-      if (res.ok) {
-        const data = await res.json();
-        setBranches(data.branches);
-      }
-    } catch (error) {
-      toast.error("Failed to load branches");
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handlePull = async () => {
     setPullLoading(true);
@@ -234,8 +232,9 @@ function BranchList({
       }
 
       toast.success(data.message || "Successfully pulled latest changes");
-    } catch (error: any) {
-      toast.error(error.message);
+    } catch (error: unknown) {
+      const err = error as { message?: string };
+      toast.error(err.message);
     } finally {
       setPullLoading(false);
     }
@@ -258,8 +257,9 @@ function BranchList({
 
       toast.success(`Switched to ${branch}`);
       onCheckout();
-    } catch (error: any) {
-      toast.error(error.message);
+    } catch (error: unknown) {
+      const err = error as { message?: string };
+      toast.error(err.message);
     } finally {
       setCheckoutLoading(null);
     }

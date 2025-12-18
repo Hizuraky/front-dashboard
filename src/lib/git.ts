@@ -18,7 +18,7 @@ export async function getLocalBranches(cwd: string): Promise<string[]> {
   try {
     const { stdout } = await execAsync(
       'git branch --list --format="%(refname:short)"',
-      { cwd }
+      { cwd },
     );
     return stdout
       .split("\n")
@@ -31,12 +31,13 @@ export async function getLocalBranches(cwd: string): Promise<string[]> {
 
 export async function checkoutBranch(
   cwd: string,
-  branch: string
+  branch: string,
 ): Promise<void> {
   try {
     await execAsync(`git checkout ${branch}`, { cwd });
-  } catch (error: any) {
-    const errorMessage = error.stderr || error.message || "Unknown error";
+  } catch (error: unknown) {
+    const err = error as { stderr?: string; message?: string };
+    const errorMessage = err.stderr || err.message || "Unknown error";
     throw new Error(`Failed to checkout branch: ${errorMessage}`);
   }
 }
@@ -45,8 +46,9 @@ export async function pullChanges(cwd: string): Promise<string> {
   try {
     const { stdout } = await execAsync("git pull", { cwd });
     return stdout;
-  } catch (error: any) {
-    const errorMessage = error.stderr || error.message || "Unknown error";
+  } catch (error: unknown) {
+    const err = error as { stderr?: string; message?: string };
+    const errorMessage = err.stderr || err.message || "Unknown error";
     throw new Error(`Failed to pull changes: ${errorMessage}`);
   }
 }

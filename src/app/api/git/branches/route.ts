@@ -8,7 +8,7 @@ export async function GET(request: Request) {
   if (!path) {
     return NextResponse.json(
       { error: "Project path is required" },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -19,7 +19,7 @@ export async function GET(request: Request) {
     console.error("Failed to get branches:", error);
     return NextResponse.json(
       { error: "Failed to get branches" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

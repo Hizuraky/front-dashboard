@@ -22,7 +22,7 @@ export default function DashboardPage() {
   const filteredProjects = projects.filter(
     (project) =>
       project.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      project.path.toLowerCase().includes(searchQuery.toLowerCase())
+      project.path.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   const fetchProjects = async () => {
@@ -33,7 +33,7 @@ export default function DashboardPage() {
         const data = await res.json();
         setProjects(data.projects);
       }
-    } catch (e) {
+    } catch {
       console.error("Failed to load projects");
     } finally {
       setRefreshing(false);

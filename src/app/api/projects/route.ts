@@ -29,7 +29,7 @@ export async function GET() {
           }
         }
       }
-    } catch (error) {
+    } catch {
       const entries = await readdir(WORKSPACE_ROOT);
       for (const name of entries) {
         if (name.startsWith(".") || name === "dashboard") continue;
@@ -65,7 +65,7 @@ export async function GET() {
     console.error("Failed to scan projects:", error);
     return NextResponse.json(
       { error: "Failed to scan projects" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

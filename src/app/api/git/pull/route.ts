@@ -8,17 +8,18 @@ export async function POST(request: Request) {
     if (!path) {
       return NextResponse.json(
         { error: "Project path is required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     const message = await pullChanges(path);
     return NextResponse.json({ success: true, message });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Failed to pull changes:", error);
+    const err = error as { message?: string };
     return NextResponse.json(
-      { error: error.message || "Failed to pull changes" },
-      { status: 500 }
+      { error: err.message || "Failed to pull changes" },
+      { status: 500 },
     );
   }
 }

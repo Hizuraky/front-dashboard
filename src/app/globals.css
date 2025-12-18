@@ -133,7 +133,8 @@ body {
 
 .neu-flat {
   background: var(--color-background);
-  box-shadow: 6px 6px 12px hsl(var(--neu-shadow-dark)),
+  box-shadow:
+    6px 6px 12px hsl(var(--neu-shadow-dark)),
     -6px -6px 12px hsl(var(--neu-shadow-light));
   border: 1px solid rgba(255, 255, 255, 0.05);
   transition: all 0.2s ease;
@@ -141,13 +142,15 @@ body {
 
 .neu-clickable:hover {
   transform: translateY(1px);
-  box-shadow: 2px 2px 8px hsl(var(--neu-shadow-dark)),
+  box-shadow:
+    2px 2px 8px hsl(var(--neu-shadow-dark)),
     -2px -2px 8px hsl(var(--neu-shadow-light));
 }
 
 .neu-pressed {
   background: var(--color-background);
-  box-shadow: inset 6px 6px 10px hsl(var(--neu-shadow-dark)),
+  box-shadow:
+    inset 6px 6px 10px hsl(var(--neu-shadow-dark)),
     inset -6px -6px 10px hsl(var(--neu-shadow-light));
   border: none;
 }
@@ -158,14 +161,16 @@ body {
   justify-content: center;
   border-radius: 9999px;
   background: var(--color-background);
-  box-shadow: 4px 4px 8px hsl(var(--neu-shadow-dark)),
+  box-shadow:
+    4px 4px 8px hsl(var(--neu-shadow-dark)),
     -4px -4px 8px hsl(var(--neu-shadow-light));
   transition: all 0.2s ease;
   color: var(--color-foreground);
 }
 
 .neu-icon-btn:active {
-  box-shadow: inset 3px 3px 6px hsl(var(--neu-shadow-dark)),
+  box-shadow:
+    inset 3px 3px 6px hsl(var(--neu-shadow-dark)),
     inset -3px -3px 6px hsl(var(--neu-shadow-light));
   transform: translateY(1px);
 }
@@ -175,7 +180,8 @@ body {
   background: var(--color-background);
   color: var(--color-foreground);
   font-weight: 600;
-  box-shadow: 5px 5px 10px hsl(var(--neu-shadow-dark)),
+  box-shadow:
+    5px 5px 10px hsl(var(--neu-shadow-dark)),
     -5px -5px 10px hsl(var(--neu-shadow-light));
   transition: all 0.2s ease;
   border: 1px solid transparent;
@@ -187,7 +193,8 @@ body {
 
 .neu-btn:active,
 .neu-btn.active {
-  box-shadow: inset 4px 4px 8px hsl(var(--neu-shadow-dark)),
+  box-shadow:
+    inset 4px 4px 8px hsl(var(--neu-shadow-dark)),
     inset -4px -4px 8px hsl(var(--neu-shadow-light));
   transform: translateY(1px);
 }
@@ -198,7 +205,8 @@ body {
 
 .neu-flat-sm {
   background: var(--color-background);
-  box-shadow: 3px 3px 6px hsl(var(--neu-shadow-dark)),
+  box-shadow:
+    3px 3px 6px hsl(var(--neu-shadow-dark)),
     -3px -3px 6px hsl(var(--neu-shadow-light));
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
