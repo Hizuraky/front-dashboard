@@ -13,15 +13,12 @@ export async function GET() {
     const projectPaths: { path: string; command: string; name?: string }[] = [];
 
     try {
-      // Try to read projects.json
       const configContent = await readFile(PROJECTS_CONFIG_PATH, "utf-8");
       const rawConfig = JSON.parse(configContent);
 
-      // Normalize to array of objects
       if (Array.isArray(rawConfig)) {
         for (const item of rawConfig) {
           if (typeof item === "string") {
-            // Check if it matches any manual entry from scanning? No, just add it.
             projectPaths.push({ path: item, command: "yarn dev" });
           } else if (typeof item === "object" && item.path) {
             projectPaths.push({
@@ -33,7 +30,6 @@ export async function GET() {
         }
       }
     } catch (error) {
-      // If projects.json doesn't exist or is invalid, fall back to scanning WORKSPACE_ROOT
       const entries = await readdir(WORKSPACE_ROOT);
       for (const name of entries) {
         if (name.startsWith(".") || name === "dashboard") continue;
@@ -48,7 +44,6 @@ export async function GET() {
       try {
         const stats = await stat(config.path);
         if (stats.isDirectory()) {
-          // Check if it has package.json to be a valid project
           await stat(join(config.path, "package.json"));
 
           const name = config.name || basename(config.path);
@@ -58,13 +53,11 @@ export async function GET() {
             name,
             path: config.path,
             status,
-            command: config.command, // Pass the command to the frontend
+            command: config.command,
             currentBranch: await getCurrentBranch(config.path),
           });
         }
-      } catch {
-        // Not a node project or check failed, just skip
-      }
+      } catch {}
     }
 
     return NextResponse.json({ projects });

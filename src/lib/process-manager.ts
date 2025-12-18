@@ -3,7 +3,7 @@ import { ChildProcess, spawn } from "child_process";
 type ProjectStatus = "running" | "stopped" | "error";
 
 export type ProjectProcess = {
-  id: string; // Absolute path as ID
+  id: string;
   process: ChildProcess;
   logs: string[];
   status: ProjectStatus;
@@ -11,7 +11,6 @@ export type ProjectProcess = {
 };
 
 declare global {
-  // eslint-disable-next-line no-var
   var __processManager: Map<string, ProjectProcess> | undefined;
 }
 
@@ -34,7 +33,7 @@ class ProcessManager {
     }
 
     const [cmd, ...args] = command.split(" ");
-    // Use shell: true to handle complex commands and path resolution
+
     const child = spawn(cmd, args, {
       cwd,
       shell: true,
@@ -52,7 +51,7 @@ class ProcessManager {
     child.stdout?.on("data", (data) => {
       const line = data.toString();
       processEntry.logs.push(line);
-      // Keep last 1000 lines
+
       if (processEntry.logs.length > 1000) processEntry.logs.shift();
     });
 
@@ -74,13 +73,7 @@ class ProcessManager {
     const entry = this.processes.get(id);
     if (!entry) return;
 
-    // Use tree-kill logic if needed, but for now simple kill
-    // In shell mode, we might need to kill the process group
     entry.process.kill();
-    // Usually need tree-kill for 'npm run dev' spawning 'next dev'
-    // For MVP we assume simple kill works or user manually cleans up
-    // Or we can try negative PID to kill group if detached?
-    // entry.process.kill('SIGTERM');
   }
 
   getLogs(id: string) {

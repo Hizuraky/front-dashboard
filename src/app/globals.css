@@ -53,20 +53,19 @@
 }
 
 :root {
-  --background: 210 20% 93%; /* Soft light gray */
+  --background: 210 20% 93%;
   --foreground: 210 10% 30%;
 
-  --card: 210 20% 93%; /* Same as background for Neumorphism */
+  --card: 210 20% 93%;
   --card-foreground: 210 10% 30%;
 
   --popover: 210 20% 93%;
   --popover-foreground: 210 10% 30%;
 
-  /* Distinct Colors Restored */
-  --primary: 222.2 47.4% 11.2%; /* Navy */
+  --primary: 222.2 47.4% 11.2%;
   --primary-foreground: 210 40% 98%;
 
-  --success: 142 76% 36%; /* Green for Running */
+  --success: 142 76% 36%;
   --success-foreground: 355.7 100% 97.3%;
 
   --secondary: 210 10% 90%;
@@ -78,21 +77,21 @@
   --accent: 210 10% 90%;
   --accent-foreground: 222.2 47.4% 11.2%;
 
-  --destructive: 0 84% 60%; /* Vibrant Red */
+  --destructive: 0 84% 60%;
   --destructive-foreground: 210 40% 98%;
 
   --border: 210 20% 85%;
   --input: 210 20% 90%;
   --ring: 222.2 47.4% 11.2%;
 
-  --radius: 1rem; /* More rounded for Neumorphism */
+  --radius: 1rem;
 
   --neu-shadow-light: 0 0% 100%;
   --neu-shadow-dark: 210 20% 82%;
 }
 
 .dark {
-  --background: 210 10% 20%; /* Dark gray */
+  --background: 210 10% 20%;
   --foreground: 210 10% 80%;
 
   --card: 210 10% 20%;
@@ -101,8 +100,7 @@
   --popover: 210 10% 20%;
   --popover-foreground: 210 10% 80%;
 
-  /* Distinct Colors Dark Mode */
-  --primary: 210 40% 98%; /* Light for dark mode default, or keep Navy if specifically requested? Usually primary flips. Let's keep it legible. */
+  --primary: 210 40% 98%;
   --primary-foreground: 222.2 47.4% 11.2%;
 
   --success: 142 70% 50%;
@@ -133,7 +131,6 @@ body {
   font-family: var(--font-sans);
 }
 
-/* Neumorphic Utilities */
 .neu-flat {
   background: var(--color-background);
   box-shadow: 6px 6px 12px hsl(var(--neu-shadow-dark)),

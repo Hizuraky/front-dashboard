@@ -9,16 +9,13 @@ export async function getCurrentBranch(cwd: string): Promise<string | null> {
       cwd,
     });
     return stdout.trim();
-  } catch (error) {
-    // Not a git repository or other error
+  } catch {
     return null;
   }
 }
 
 export async function getLocalBranches(cwd: string): Promise<string[]> {
   try {
-    // Get list of local branches
-    // --format="%(refname:short)" gives clean branch names
     const { stdout } = await execAsync(
       'git branch --list --format="%(refname:short)"',
       { cwd }
@@ -27,7 +24,7 @@ export async function getLocalBranches(cwd: string): Promise<string[]> {
       .split("\n")
       .map((b) => b.trim())
       .filter((b) => b.length > 0);
-  } catch (error) {
+  } catch {
     return [];
   }
 }
@@ -39,7 +36,6 @@ export async function checkoutBranch(
   try {
     await execAsync(`git checkout ${branch}`, { cwd });
   } catch (error: any) {
-    // Capture stderr for better error messages
     const errorMessage = error.stderr || error.message || "Unknown error";
     throw new Error(`Failed to checkout branch: ${errorMessage}`);
   }

@@ -30,7 +30,6 @@ export function LogViewer({ path }: LogViewerProps) {
   }, [path]);
 
   useEffect(() => {
-    // Auto scroll to bottom
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [logs]);
 

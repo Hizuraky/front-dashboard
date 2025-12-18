@@ -56,7 +56,6 @@ export function ProjectCard({ project, onRefresh }: ProjectCardProps) {
   const handleStart = async () => {
     setLoading(true);
     try {
-      // Use the configured command or default to "yarn dev"
       const command = project.command || "yarn dev";
       const res = await fetch("/api/process", {
         method: "POST",
