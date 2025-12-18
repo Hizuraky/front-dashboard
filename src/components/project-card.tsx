@@ -11,7 +11,9 @@ import {
   GitBranch,
   Check,
   Download,
+  Search,
 } from "lucide-react";
+import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -145,12 +147,12 @@ export function ProjectCard({ project, onRefresh }: ProjectCardProps) {
               Logs
             </Button>
           </SheetTrigger>
-          <SheetContent className="w-[800px] sm:max-w-[800px] flex flex-col h-full">
+          <SheetContent className="w-[90vw] max-w-[90vw] min-w-[90vw] flex flex-col h-full">
             <SheetHeader>
               <SheetTitle>{project.name} Logs</SheetTitle>
               <SheetDescription>Live output from the process.</SheetDescription>
             </SheetHeader>
-            <div className="flex-1 mt-4 overflow-hidden relative">
+            <div className="mt-4 overflow-hidden relative">
               <LogViewer path={project.path} />
             </div>
           </SheetContent>
@@ -159,9 +161,11 @@ export function ProjectCard({ project, onRefresh }: ProjectCardProps) {
         {project.currentBranch && (
           <Sheet>
             <SheetTrigger asChild>
-              <Button variant="outline" size="sm" className="w-full">
-                <GitBranch className="mr-2 h-4 w-4" />
-                {project.currentBranch}
+              <Button variant="outline" size="sm" className="w-full px-2">
+                <GitBranch className="mr-2 h-4 w-4 shrink-0" />
+                <span className="truncate max-w-[80px] sm:max-w-[120px]">
+                  {project.currentBranch}
+                </span>
               </Button>
             </SheetTrigger>
             <SheetContent>
@@ -191,6 +195,11 @@ function BranchList({
   const [loading, setLoading] = useState(true);
   const [checkoutLoading, setCheckoutLoading] = useState<string | null>(null);
   const [pullLoading, setPullLoading] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const filteredBranches = branches.filter((branch) =>
+    branch.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   useEffect(() => {
     fetchBranches();
@@ -282,9 +291,19 @@ function BranchList({
         Pull Latest
       </Button>
 
+      <div className="relative mb-4">
+        <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+        <Input
+          placeholder="Search branches..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="pl-8"
+        />
+      </div>
+
       <ScrollArea className="h-[calc(100vh-180px)]">
         <div className="flex flex-col gap-2 pr-4">
-          {branches.map((branch) => (
+          {filteredBranches.map((branch) => (
             <Button
               key={branch}
               variant={

@@ -2,8 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { ProjectCard } from "@/components/project-card";
-import { RefreshCw } from "lucide-react";
+import { RefreshCw, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 interface Project {
   name: string;
@@ -16,6 +17,13 @@ interface Project {
 export default function DashboardPage() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [refreshing, setRefreshing] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const filteredProjects = projects.filter(
+    (project) =>
+      project.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      project.path.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   const fetchProjects = async () => {
     setRefreshing(true);
@@ -37,26 +45,33 @@ export default function DashboardPage() {
   }, []);
 
   return (
-    <div className="container mx-auto py-10">
+    <div className="w-full mx-auto px-6">
       <div className="flex items-center justify-between mb-8">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">
-            Project Dashboard
-          </h1>
-          <p className="text-muted-foreground mt-2">
-            Manage your local Next.js projects from one place.
-          </p>
+        <div className="flex items-center gap-2 justify-between w-full pt-6">
+          <div className="relative w-full">
+            <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Search..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-8 w-full max-w-[500px]"
+            />
+          </div>
+          <Button
+            variant="outline"
+            onClick={fetchProjects}
+            disabled={refreshing}
+          >
+            <RefreshCw
+              className={`mr-2 h-4 w-4 ${refreshing ? "animate-spin" : ""}`}
+            />
+            Refresh
+          </Button>
         </div>
-        <Button variant="outline" onClick={fetchProjects} disabled={refreshing}>
-          <RefreshCw
-            className={`mr-2 h-4 w-4 ${refreshing ? "animate-spin" : ""}`}
-          />
-          Refresh
-        </Button>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {projects.map((project) => (
+      <div className="grid gap-6 lg:grid-cols-2">
+        {filteredProjects.map((project) => (
           <ProjectCard
             key={project.path}
             project={project}
