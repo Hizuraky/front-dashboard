@@ -9,6 +9,7 @@ interface Project {
   name: string;
   path: string;
   status: "running" | "stopped" | "error";
+  command?: string;
 }
 
 export default function DashboardPage() {

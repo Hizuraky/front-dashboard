@@ -35,6 +35,7 @@ interface Project {
   name: string;
   path: string;
   status: ProjectStatus;
+  command?: string;
 }
 
 interface ProjectCardProps {
@@ -48,9 +49,8 @@ export function ProjectCard({ project, onRefresh }: ProjectCardProps) {
   const handleStart = async () => {
     setLoading(true);
     try {
-      // Defaulting to "yarn dev" or "npm run dev" could be improved by checking package.json scripts
-      // For now, we assume standard Next.js dev
-      const command = "yarn dev";
+      // Use the configured command or default to "yarn dev"
+      const command = project.command || "yarn dev";
       const res = await fetch("/api/process", {
         method: "POST",
         body: JSON.stringify({ path: project.path, command }),
