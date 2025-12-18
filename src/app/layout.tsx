@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
-import { Inter, Roboto_Mono } from "next/font/google";
+import { Kaisei_Opti, Roboto_Mono } from "next/font/google"; // Changed Zen_Maru_Gothic to Kaisei_Opti
 import { Toaster } from "sonner";
 import "./globals.css";
 
-const inter = Inter({
+const kaiseiOpti = Kaisei_Opti({
+  weight: ["400", "500", "700"],
   subsets: ["latin"],
-  variable: "--font-geist-sans",
+  variable: "--font-kaisei-opti",
   display: "swap",
 });
 
@@ -27,7 +28,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} ${robotoMono.variable} antialiased`}>
+      <body
+        className={`${kaiseiOpti.variable} ${robotoMono.variable} antialiased`}
+      >
         {children}
         <Toaster />
       </body>

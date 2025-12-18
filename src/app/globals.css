@@ -31,7 +31,7 @@
   --radius-sm: calc(var(--radius) - 4px);
   --animate-accordion-down: accordion-down 0.2s ease-out;
   --animate-accordion-up: accordion-up 0.2s ease-out;
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-kaisei-opti);
   --font-mono: var(--font-geist-mono);
 
   @keyframes accordion-down {
@@ -128,7 +128,7 @@
 body {
   background-color: var(--color-background);
   color: var(--color-foreground);
-  font-family: var(--font-sans);
+  font-family: var(--font-kaisei-opti), sans-serif;
 }
 
 .neu-flat {
