@@ -78,13 +78,17 @@ class ProcessManager {
       const line = data.toString();
       processEntry.logs.push(line);
 
-      if (processEntry.logs.length > 1000) processEntry.logs.shift();
+      if (processEntry.logs.length > 2000) {
+        processEntry.logs.splice(0, processEntry.logs.length - 2000);
+      }
     });
 
     child.stderr?.on("data", (data) => {
       const line = data.toString();
       processEntry.logs.push(line);
-      if (processEntry.logs.length > 1000) processEntry.logs.shift();
+      if (processEntry.logs.length > 2000) {
+        processEntry.logs.splice(0, processEntry.logs.length - 2000);
+      }
     });
 
     child.on("exit", (code) => {
