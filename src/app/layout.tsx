@@ -19,6 +19,9 @@ const robotoMono = Roboto_Mono({
 export const metadata: Metadata = {
   title: "Dashboard",
   description: "Next.js Project Manager",
+  icons: {
+    icon: "/favicon.svg",
+  },
 };
 
 export default function RootLayout({
