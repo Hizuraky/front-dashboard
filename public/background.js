@@ -1,4 +1,4 @@
-chrome.action.onClicked.addListener(async (tab) => {
+const toggleSidebar = async (tab) => {
   // chrome:// や edge:// などのシステムページでは実行できないため除外
   if (
     !tab.id ||
@@ -28,6 +28,20 @@ chrome.action.onClicked.addListener(async (tab) => {
       await chrome.tabs.sendMessage(tab.id, { action: "toggle_sidebar" });
     } catch (injectError) {
       console.error("Failed to inject script:", injectError);
+    }
+  }
+};
+
+chrome.action.onClicked.addListener(toggleSidebar);
+
+chrome.commands.onCommand.addListener(async (command) => {
+  if (command === "toggle_sidebar") {
+    const [tab] = await chrome.tabs.query({
+      active: true,
+      currentWindow: true,
+    });
+    if (tab) {
+      await toggleSidebar(tab);
     }
   }
 });
