@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { API_BASE_URL } from "@/config";
 import Image from "next/image";
 import {
   Play,
@@ -56,7 +57,7 @@ export function ProjectCard({ project, onRefresh }: ProjectCardProps) {
     setLoading(true);
     try {
       const command = project.command || "yarn dev";
-      const res = await fetch("/api/process", {
+      const res = await fetch(`${API_BASE_URL}/api/process`, {
         method: "POST",
         body: JSON.stringify({ path: project.path, command }),
       });
@@ -74,7 +75,7 @@ export function ProjectCard({ project, onRefresh }: ProjectCardProps) {
     setLoading(true);
     try {
       const res = await fetch(
-        `/api/process?path=${encodeURIComponent(project.path)}`,
+        `${API_BASE_URL}/api/process?path=${encodeURIComponent(project.path)}`,
         {
           method: "DELETE",
         }
@@ -91,7 +92,7 @@ export function ProjectCard({ project, onRefresh }: ProjectCardProps) {
 
   const handleOpenCode = async () => {
     try {
-      const res = await fetch("/api/open-editor", {
+      const res = await fetch(`${API_BASE_URL}/api/open-editor`, {
         method: "POST",
         body: JSON.stringify({
           path: project.path,
@@ -297,7 +298,7 @@ function BranchList({
       setLoading(true);
       try {
         const res = await fetch(
-          `/api/git/branches?path=${encodeURIComponent(project.path)}`
+          `${API_BASE_URL}/api/git/branches?path=${encodeURIComponent(project.path)}`
         );
         if (res.ok) {
           const data = await res.json();
@@ -316,7 +317,7 @@ function BranchList({
   const handlePull = async () => {
     setPullLoading(true);
     try {
-      const res = await fetch("/api/git/pull", {
+      const res = await fetch(`${API_BASE_URL}/api/git/pull`, {
         method: "POST",
         body: JSON.stringify({ path: project.path }),
       });
@@ -340,7 +341,7 @@ function BranchList({
 
     setCheckoutLoading(branch);
     try {
-      const res = await fetch("/api/git/checkout", {
+      const res = await fetch(`${API_BASE_URL}/api/git/checkout`, {
         method: "POST",
         body: JSON.stringify({ path: project.path, branch }),
       });

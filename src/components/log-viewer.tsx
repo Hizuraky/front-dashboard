@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { API_BASE_URL } from "@/config";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface LogViewerProps {
@@ -16,7 +17,9 @@ export function LogViewer({ path }: LogViewerProps) {
   useEffect(() => {
     const fetchLogs = async () => {
       try {
-        const res = await fetch(`/api/logs?path=${encodeURIComponent(path)}`);
+        const res = await fetch(
+          `${API_BASE_URL}/api/logs?path=${encodeURIComponent(path)}`
+        );
         if (res.ok) {
           const data = await res.json();
           setLogs(data.logs);

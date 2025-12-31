@@ -5,6 +5,7 @@ import { ProjectCard } from "@/components/project-card";
 import { RefreshCw, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { API_BASE_URL } from "@/config";
 
 import type { Project } from "@/types/project";
 
@@ -22,7 +23,7 @@ export default function DashboardPage() {
   const fetchProjects = async () => {
     setRefreshing(true);
     try {
-      const res = await fetch("/api/projects");
+      const res = await fetch(`${API_BASE_URL}/api/projects`);
       if (res.ok) {
         const data = await res.json();
         setProjects(data.projects);
