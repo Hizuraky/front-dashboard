@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Dashboard Sidebar Extension",
+  "name": "Dashboard",
   "version": "0.1.0",
   "description": "Dashboard displayed as a sidebar overlay",
   "action": {},
