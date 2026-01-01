@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { ProjectCard } from "@/components/project-card";
 import { RefreshCw, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ModeToggle } from "@/components/mode-toggle";
 import { Input } from "@/components/ui/input";
 import { API_BASE_URL } from "@/config";
 
@@ -62,6 +63,7 @@ export default function DashboardPage() {
             />
             Refresh
           </Button>
+          <ModeToggle />
         </div>
       </div>
 

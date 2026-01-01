@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Kaisei_Opti, Roboto_Mono } from "next/font/google"; // Changed Zen_Maru_Gothic to Kaisei_Opti
 import { Toaster } from "sonner";
 import "./globals.css";
+import { ThemeProvider } from "@/components/theme-provider";
 
 const kaiseiOpti = Kaisei_Opti({
   weight: ["400", "500", "700"],
@@ -30,12 +31,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${kaiseiOpti.variable} ${robotoMono.variable} antialiased`}
       >
-        {children}
-        <Toaster />
+        <ThemeProvider defaultTheme="system" storageKey="dashboard-theme">
+          {children}
+          <Toaster />
+        </ThemeProvider>
       </body>
     </html>
   );
