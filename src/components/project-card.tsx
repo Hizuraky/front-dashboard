@@ -111,8 +111,8 @@ export function ProjectCard({ project, onRefresh }: ProjectCardProps) {
   };
 
   return (
-    <Card className="w-full">
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+    <Card className="w-full min-w-0">
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 max-[500px]:p-3 max-[500px]:pb-2">
         <div className="flex items-center gap-2 overflow-hidden mr-2">
           <div
             className={`w-2.5 h-2.5 rounded-full ${
@@ -192,7 +192,7 @@ export function ProjectCard({ project, onRefresh }: ProjectCardProps) {
             ))}
         </div>
       </CardHeader>
-      <CardContent>
+      <CardContent className="max-[500px]:p-3 max-[500px]:pt-0">
         <div
           className="text-xs text-muted-foreground truncate"
           title={project.path}
@@ -200,7 +200,7 @@ export function ProjectCard({ project, onRefresh }: ProjectCardProps) {
           {project.path}
         </div>
       </CardContent>
-      <CardFooter className="flex justify-between gap-2">
+      <CardFooter className="flex justify-between gap-2 max-[500px]:p-3 max-[500px]:pt-0">
         {project.status === "running" ? (
           <Button
             variant="destructive"
@@ -210,34 +210,34 @@ export function ProjectCard({ project, onRefresh }: ProjectCardProps) {
             className="w-full"
           >
             {loading ? (
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              <Loader2 className="mr-2 h-4 w-4 animate-spin max-[500px]:mr-0" />
             ) : (
-              <Square className="mr-2 h-4 w-4" />
+              <Square className="mr-2 h-4 w-4 max-[500px]:mr-0" />
             )}
-            Stop
+            <span className="max-[500px]:hidden">Stop</span>
           </Button>
         ) : (
           <Button
-            variant="default"
+            variant="outline"
             size="sm"
             onClick={handleStart}
             disabled={loading}
             className="w-full"
           >
             {loading ? (
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              <Loader2 className="mr-2 h-4 w-4 animate-spin max-[500px]:mr-0" />
             ) : (
-              <Play className="mr-2 h-4 w-4" />
+              <Play className="mr-2 h-4 w-4 max-[500px]:mr-0" />
             )}
-            Start
+            <span className="max-[500px]:hidden">Start</span>
           </Button>
         )}
 
         <Sheet>
           <SheetTrigger asChild>
             <Button variant="outline" size="sm" className="w-full">
-              <Terminal className="mr-2 h-4 w-4" />
-              Logs
+              <Terminal className="mr-2 h-4 w-4 max-[500px]:mr-0" />
+              <span className="max-[500px]:hidden">Logs</span>
             </Button>
           </SheetTrigger>
           <SheetContent className="w-[90vw] max-w-[90vw] min-w-[90vw] flex flex-col h-full">
@@ -254,8 +254,8 @@ export function ProjectCard({ project, onRefresh }: ProjectCardProps) {
           <Sheet>
             <SheetTrigger asChild>
               <Button variant="outline" size="sm" className="w-full px-2">
-                <GitBranch className="mr-2 h-4 w-4 shrink-0" />
-                <span className="truncate max-w-[80px] sm:max-w-[120px]">
+                <GitBranch className="mr-2 h-4 w-4 shrink-0 max-[500px]:mr-0" />
+                <span className="truncate max-w-[80px] sm:max-w-[120px] max-[500px]:hidden">
                   {project.currentBranch}
                 </span>
               </Button>
