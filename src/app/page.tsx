@@ -57,11 +57,14 @@ export default function DashboardPage() {
             variant="outline"
             onClick={fetchProjects}
             disabled={refreshing}
+            className="max-[500px]:w-9 max-[500px]:px-0"
           >
             <RefreshCw
-              className={`mr-2 h-4 w-4 ${refreshing ? "animate-spin" : ""}`}
+              className={`mr-2 h-4 w-4 max-[500px]:mr-0 ${
+                refreshing ? "animate-spin" : ""
+              }`}
             />
-            Refresh
+            <span className="max-[500px]:hidden">Refresh</span>
           </Button>
           <ModeToggle />
         </div>

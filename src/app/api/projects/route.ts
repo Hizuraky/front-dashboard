@@ -77,7 +77,7 @@ export async function GET() {
     console.error("Failed to scan projects:", error);
     return NextResponse.json(
       { error: "Failed to scan projects" },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }

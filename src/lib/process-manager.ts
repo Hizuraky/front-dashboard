@@ -16,18 +16,22 @@ export type ProjectProcess = {
 
 declare global {
   var __processManager: Map<string, ProjectProcess> | undefined;
+  var __externalProcessManager: Map<string, Set<number>> | undefined;
 }
 
 class ProcessManager {
   private processes: Map<string, ProjectProcess>;
-  private externalProcesses: Map<string, number>;
+  private externalProcesses: Map<string, Set<number>>;
 
   constructor() {
     if (!global.__processManager) {
       global.__processManager = new Map();
     }
+    if (!global.__externalProcessManager) {
+      global.__externalProcessManager = new Map();
+    }
     this.processes = global.__processManager;
-    this.externalProcesses = new Map();
+    this.externalProcesses = global.__externalProcessManager;
   }
 
   async scanRunningProcesses() {
@@ -43,7 +47,10 @@ class ProcessManager {
           currentPid = parseInt(line.substring(1), 10);
         } else if (line.startsWith("n") && currentPid) {
           const path = line.substring(1);
-          this.externalProcesses.set(path, currentPid);
+          if (!this.externalProcesses.has(path)) {
+            this.externalProcesses.set(path, new Set());
+          }
+          this.externalProcesses.get(path)?.add(currentPid);
         }
       }
     } catch {}
@@ -63,6 +70,7 @@ class ProcessManager {
       cwd,
       shell: true,
       stdio: ["ignore", "pipe", "pipe"],
+      detached: true,
     });
 
     const processEntry: ProjectProcess = {
@@ -99,20 +107,53 @@ class ProcessManager {
     this.processes.set(id, processEntry);
   }
 
-  stop(id: string) {
+  async stop(id: string) {
     const entry = this.processes.get(id);
-    if (entry && entry.process) {
-      entry.process.kill();
-      return;
+    const externalPids = this.externalProcesses.get(id);
+
+    if (entry && entry.process && entry.status === "running") {
+      try {
+        if (entry.process.pid) {
+          process.kill(-entry.process.pid);
+        }
+      } catch (e) {
+        entry.process.kill();
+      }
+
+      await new Promise<void>((resolve) => {
+        const onExit = () => {
+          resolve();
+          entry.process?.off("exit", onExit);
+        };
+        entry.process?.once("exit", onExit);
+        setTimeout(resolve, 2000);
+      });
     }
 
-    const pid = this.externalProcesses.get(id);
-    if (pid) {
+    if (externalPids && externalPids.size > 0) {
+      const pids = Array.from(externalPids);
+      await Promise.all(
+        pids.map(async (pid) => {
+          try {
+            process.kill(pid);
+            await this.waitForPidToExit(pid);
+          } catch (e) {
+            // Process might be already gone or we lack permission
+          }
+        })
+      );
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      this.externalProcesses.delete(id);
+    }
+  }
+
+  private async waitForPidToExit(pid: number) {
+    for (let i = 0; i < 50; i++) {
       try {
-        process.kill(pid);
-        this.externalProcesses.delete(id);
-      } catch (e) {
-        console.error(`Failed to kill external process ${pid}:`, e);
+        process.kill(pid, 0);
+        await new Promise((resolve) => setTimeout(resolve, 500));
+      } catch {
+        return;
       }
     }
   }
@@ -138,7 +179,10 @@ class ProcessManager {
       return "running";
     }
 
-    if (this.externalProcesses.has(id)) {
+    if (
+      this.externalProcesses.has(id) &&
+      this.externalProcesses.get(id)!.size > 0
+    ) {
       return "running";
     }
 

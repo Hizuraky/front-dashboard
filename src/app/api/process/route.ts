@@ -9,7 +9,7 @@ export async function POST(req: NextRequest) {
     if (!path || !command) {
       return NextResponse.json(
         { error: "Missing path or command" },
-        { status: 400 },
+        { status: 400 }
       );
     }
 
@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
     const err = error as { message?: string };
     return NextResponse.json(
       { error: err.message || "Failed to start process" },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }
@@ -33,13 +33,13 @@ export async function DELETE(req: NextRequest) {
       return NextResponse.json({ error: "Missing path" }, { status: 400 });
     }
 
-    processManager.stop(path);
+    await processManager.stop(path);
     return NextResponse.json({ success: true });
   } catch (error: unknown) {
     const err = error as { message?: string };
     return NextResponse.json(
       { error: err.message || "Failed to stop process" },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }
