@@ -4,8 +4,6 @@ import path from "path";
 import { encrypt, decrypt } from "@/lib/security";
 import { v4 as uuidv4 } from "uuid";
 
-const FILE_PATH = path.join(process.cwd(), "passwords.json");
-
 type PasswordEntry = {
   id: string;
   site: string;
@@ -14,14 +12,23 @@ type PasswordEntry = {
   updatedAt: string;
 };
 
-// Ensure file exists
-if (!fs.existsSync(FILE_PATH)) {
-  fs.writeFileSync(FILE_PATH, JSON.stringify([]));
+// Helper to get file path safely
+const getFilePath = () => {
+  return path.join(process.cwd(), "passwords.json");
+};
+
+// Helper to seed data if missing
+function ensureDataExists() {
+  const filePath = getFilePath();
+  if (!fs.existsSync(filePath)) {
+    fs.writeFileSync(filePath, JSON.stringify([]));
+  }
 }
 
 export async function GET() {
   try {
-    const fileContent = fs.readFileSync(FILE_PATH, "utf-8");
+    ensureDataExists();
+    const fileContent = fs.readFileSync(getFilePath(), "utf-8");
     const data: PasswordEntry[] = JSON.parse(fileContent);
 
     // Decrypt passwords before sending to client
@@ -56,7 +63,9 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Missing fields" }, { status: 400 });
     }
 
-    const fileContent = fs.readFileSync(FILE_PATH, "utf-8");
+    ensureDataExists();
+    const filePath = getFilePath();
+    const fileContent = fs.readFileSync(filePath, "utf-8");
     const data: PasswordEntry[] = JSON.parse(fileContent);
 
     const encryptedPassword = encrypt(password);
@@ -88,7 +97,7 @@ export async function POST(request: Request) {
       updatedData = [newEntry, ...data];
     }
 
-    fs.writeFileSync(FILE_PATH, JSON.stringify(updatedData, null, 2));
+    fs.writeFileSync(filePath, JSON.stringify(updatedData, null, 2));
 
     // Return the single item (decrypted) or success
     return NextResponse.json({ success: true });
@@ -110,15 +119,17 @@ export async function DELETE(request: Request) {
       return NextResponse.json({ error: "Missing ID" }, { status: 400 });
     }
 
-    const fileContent = fs.readFileSync(FILE_PATH, "utf-8");
+    ensureDataExists();
+    const filePath = getFilePath();
+    const fileContent = fs.readFileSync(filePath, "utf-8");
     const data: PasswordEntry[] = JSON.parse(fileContent);
 
     const updatedData = data.filter((item) => item.id !== id);
 
-    fs.writeFileSync(FILE_PATH, JSON.stringify(updatedData, null, 2));
+    fs.writeFileSync(filePath, JSON.stringify(updatedData, null, 2));
 
     return NextResponse.json({ success: true });
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: "Failed to delete" }, { status: 500 });
   }
 }
