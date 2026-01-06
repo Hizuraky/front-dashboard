@@ -31,6 +31,7 @@ import {
   SheetTrigger,
   SheetFooter,
 } from "@/components/ui/sheet";
+import { API_BASE_URL } from "@/config";
 
 type PasswordEntry = {
   id: string;
@@ -57,7 +58,7 @@ export default function PasswordsPage() {
   const fetchPasswords = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`/api/passwords`);
+      const res = await fetch(`${API_BASE_URL}/api/passwords`);
       if (res.ok) {
         const data = await res.json();
         setPasswords(data);
@@ -82,7 +83,7 @@ export default function PasswordsPage() {
     e.preventDefault();
     setSubmitting(true);
     try {
-      const res = await fetch(`/api/passwords`, {
+      const res = await fetch(`${API_BASE_URL}/api/passwords`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -108,7 +109,7 @@ export default function PasswordsPage() {
       return;
 
     try {
-      const res = await fetch(`/api/passwords?id=${id}`, {
+      const res = await fetch(`${API_BASE_URL}/api/passwords?id=${id}`, {
         method: "DELETE",
       });
       if (res.ok) {
