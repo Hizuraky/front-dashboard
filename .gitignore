@@ -42,3 +42,6 @@ next-env.d.ts
 
 # local config
 projects.json
+passwords.json
+secret.key
+
