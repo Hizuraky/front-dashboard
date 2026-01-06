@@ -4,8 +4,12 @@ const isExport = process.env.IS_EXPORT === "true";
 
 const nextConfig: NextConfig = {
   output: isExport ? "export" : undefined,
+  trailingSlash: isExport,
   images: {
     unoptimized: true,
+  },
+  env: {
+    IS_EXPORT: isExport ? "true" : "false",
   },
   async headers() {
     if (isExport) return [];

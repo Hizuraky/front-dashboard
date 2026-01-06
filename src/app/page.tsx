@@ -2,12 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { ProjectCard } from "@/components/project-card";
-import { RefreshCw, Search, Key } from "lucide-react";
+import { RefreshCw, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ModeToggle } from "@/components/mode-toggle";
+import { PasswordManager } from "@/components/password-manager";
 import { Input } from "@/components/ui/input";
 import { API_BASE_URL } from "@/config";
-import Link from "next/link";
 
 import type { Project } from "@/types/project";
 
@@ -67,11 +67,7 @@ export default function DashboardPage() {
             />
             <span className="max-[500px]:hidden">Refresh</span>
           </Button>
-          <Link href="/passwords">
-            <Button variant="outline" size="icon">
-              <Key className="h-4 w-4" />
-            </Button>
-          </Link>
+          <PasswordManager />
           <ModeToggle />
         </div>
       </div>
