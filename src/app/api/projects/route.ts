@@ -4,7 +4,7 @@ import { join, basename } from "path";
 import { processManager } from "@/lib/process-manager";
 import { getCurrentBranch } from "@/lib/git";
 
-const WORKSPACE_ROOT = "/Users/kazuki/WorkSpace/0plus";
+const WORKSPACE_ROOT = process.env.WORKSPACE_ROOT;
 const PROJECTS_CONFIG_PATH = join(process.cwd(), "projects.json");
 
 export async function GET() {
@@ -40,13 +40,15 @@ export async function GET() {
         }
       }
     } catch {
-      const entries = await readdir(WORKSPACE_ROOT);
-      for (const name of entries) {
-        if (name.startsWith(".") || name === "dashboard") continue;
-        projectPaths.push({
-          path: join(WORKSPACE_ROOT, name),
-          command: "yarn dev",
-        });
+      if (WORKSPACE_ROOT) {
+        const entries = await readdir(WORKSPACE_ROOT);
+        for (const name of entries) {
+          if (name.startsWith(".") || name === "dashboard") continue;
+          projectPaths.push({
+            path: join(WORKSPACE_ROOT, name),
+            command: "yarn dev",
+          });
+        }
       }
     }
 
