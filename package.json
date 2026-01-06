@@ -4,8 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
-    "build:extension": "node scripts/build-extension.mjs",
+    "build": "node scripts/build-extension.mjs",
     "start": "next start -p 3102",
     "lint": "eslint",
     "format": "prettier --write --ignore-path .gitignore .",
