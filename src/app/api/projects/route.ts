@@ -18,6 +18,7 @@ export async function GET() {
       name?: string;
       codeCommand?: string;
       environments?: { name: string; url: string }[];
+      type?: "repository" | "site";
     }[] = [];
 
     try {
@@ -35,6 +36,7 @@ export async function GET() {
               name: item.name,
               codeCommand: item.codeCommand,
               environments: item.environments,
+              type: item.type,
             });
           }
         }
@@ -56,7 +58,9 @@ export async function GET() {
       try {
         const stats = await stat(config.path);
         if (stats.isDirectory()) {
-          await stat(join(config.path, "package.json"));
+          if (config.type !== "site") {
+            await stat(join(config.path, "package.json"));
+          }
 
           const name = config.name || basename(config.path);
           const status = processManager.getStatus(config.path);
@@ -66,9 +70,13 @@ export async function GET() {
             path: config.path,
             status,
             command: config.command,
-            currentBranch: await getCurrentBranch(config.path),
+            currentBranch:
+              config.type !== "site"
+                ? await getCurrentBranch(config.path)
+                : undefined,
             codeCommand: config.codeCommand,
             environments: config.environments,
+            type: config.type,
           });
         }
       } catch {}

@@ -21,5 +21,17 @@
     "command": "npm run dev",
     "codeCommand": "code .",
     "environments": []
+  },
+  {
+    "name": "documentation-site",
+    "path": "/Users/username/WorkSpace/docs",
+    "type": "site",
+    "codeCommand": "code .",
+    "environments": [
+      {
+        "name": "Production",
+        "url": "https://docs.example.com"
+      }
+    ]
   }
 ]

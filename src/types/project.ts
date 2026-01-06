@@ -13,4 +13,5 @@ export interface Project {
   currentBranch?: string;
   codeCommand?: string;
   environments?: ProjectEnvironment[];
+  type?: "repository" | "site";
 }

@@ -200,78 +200,80 @@ export function ProjectCard({ project, onRefresh }: ProjectCardProps) {
           {project.path}
         </div>
       </CardContent>
-      <CardFooter className="flex justify-between gap-2 max-[500px]:p-3 max-[500px]:pt-0">
-        {project.status === "running" ? (
-          <Button
-            variant="destructive"
-            size="sm"
-            onClick={handleStop}
-            disabled={loading}
-            className="w-full"
-          >
-            {loading ? (
-              <Loader2 className="mr-2 h-4 w-4 animate-spin max-[500px]:mr-0" />
-            ) : (
-              <Square className="mr-2 h-4 w-4 max-[500px]:mr-0" />
-            )}
-            <span className="max-[500px]:hidden">Stop</span>
-          </Button>
-        ) : (
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleStart}
-            disabled={loading}
-            className="w-full"
-          >
-            {loading ? (
-              <Loader2 className="mr-2 h-4 w-4 animate-spin max-[500px]:mr-0" />
-            ) : (
-              <Play className="mr-2 h-4 w-4 max-[500px]:mr-0" />
-            )}
-            <span className="max-[500px]:hidden">Start</span>
-          </Button>
-        )}
-
-        <Sheet>
-          <SheetTrigger asChild>
-            <Button variant="outline" size="sm" className="w-full">
-              <Terminal className="mr-2 h-4 w-4 max-[500px]:mr-0" />
-              <span className="max-[500px]:hidden">Logs</span>
+      {project.type !== "site" && (
+        <CardFooter className="flex justify-between gap-2 max-[500px]:p-3 max-[500px]:pt-0">
+          {project.status === "running" ? (
+            <Button
+              variant="destructive"
+              size="sm"
+              onClick={handleStop}
+              disabled={loading}
+              className="w-full"
+            >
+              {loading ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin max-[500px]:mr-0" />
+              ) : (
+                <Square className="mr-2 h-4 w-4 max-[500px]:mr-0" />
+              )}
+              <span className="max-[500px]:hidden">Stop</span>
             </Button>
-          </SheetTrigger>
-          <SheetContent className="w-[90vw] max-w-[90vw] min-w-[90vw] flex flex-col h-full">
-            <SheetHeader>
-              <SheetTitle>{project.name} Logs</SheetTitle>
-            </SheetHeader>
-            <div className="mt-0 overflow-hidden relative">
-              <LogViewer path={project.path} />
-            </div>
-          </SheetContent>
-        </Sheet>
+          ) : (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleStart}
+              disabled={loading}
+              className="w-full"
+            >
+              {loading ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin max-[500px]:mr-0" />
+              ) : (
+                <Play className="mr-2 h-4 w-4 max-[500px]:mr-0" />
+              )}
+              <span className="max-[500px]:hidden">Start</span>
+            </Button>
+          )}
 
-        {project.currentBranch && (
           <Sheet>
             <SheetTrigger asChild>
-              <Button variant="outline" size="sm" className="w-full px-2">
-                <GitBranch className="mr-2 h-4 w-4 shrink-0 max-[500px]:mr-0" />
-                <span className="truncate max-w-[80px] sm:max-w-[120px] max-[500px]:hidden">
-                  {project.currentBranch}
-                </span>
+              <Button variant="outline" size="sm" className="w-full">
+                <Terminal className="mr-2 h-4 w-4 max-[500px]:mr-0" />
+                <span className="max-[500px]:hidden">Logs</span>
               </Button>
             </SheetTrigger>
-            <SheetContent>
+            <SheetContent className="w-[90vw] max-w-[90vw] min-w-[90vw] flex flex-col h-full">
               <SheetHeader>
-                <SheetTitle>Git Branches</SheetTitle>
-                <SheetDescription>
-                  Switch between local branches for {project.name}.
-                </SheetDescription>
+                <SheetTitle>{project.name} Logs</SheetTitle>
               </SheetHeader>
-              <BranchList project={project} onCheckout={onRefresh} />
+              <div className="mt-0 overflow-hidden relative">
+                <LogViewer path={project.path} />
+              </div>
             </SheetContent>
           </Sheet>
-        )}
-      </CardFooter>
+
+          {project.currentBranch && (
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button variant="outline" size="sm" className="w-full px-2">
+                  <GitBranch className="mr-2 h-4 w-4 shrink-0 max-[500px]:mr-0" />
+                  <span className="truncate max-w-[80px] sm:max-w-[120px] max-[500px]:hidden">
+                    {project.currentBranch}
+                  </span>
+                </Button>
+              </SheetTrigger>
+              <SheetContent>
+                <SheetHeader>
+                  <SheetTitle>Git Branches</SheetTitle>
+                  <SheetDescription>
+                    Switch between local branches for {project.name}.
+                  </SheetDescription>
+                </SheetHeader>
+                <BranchList project={project} onCheckout={onRefresh} />
+              </SheetContent>
+            </Sheet>
+          )}
+        </CardFooter>
+      )}
     </Card>
   );
 }
